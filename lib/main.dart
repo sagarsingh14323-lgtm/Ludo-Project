@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const LudoApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LudoApp extends StatelessWidget {
+  const LudoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Ludo App',
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      title: 'Ludo App',
+      home: const LudoBoardScreen(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class LudoBoardScreen extends StatelessWidget {
+  const LudoBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ludo App'),
+        centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'Build Successful 🎉',
-          style: TextStyle(fontSize: 22),
+      body: Center(
+        child: Image.asset(
+          'assets/images/ludo_board.png',
+          fit: BoxFit.contain,
         ),
       ),
     );
