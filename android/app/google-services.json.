@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "800986577744",
+    "project_id": "realludo-9657f",
+    "storage_bucket": "realludo-9657f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800986577744:android:5ccdf96a818bedcea1ca55",
+        "android_client_info": {
+          "package_name": "com.example.ludo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCUX75V09dOXx-jjv5cn8DjsvMTe45dCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
