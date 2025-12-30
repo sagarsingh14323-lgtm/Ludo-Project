@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+// Ye line sabse zaroori hai
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
