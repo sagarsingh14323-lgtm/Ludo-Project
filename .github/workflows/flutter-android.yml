@@ -15,25 +15,22 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.19.6"
-          channel: "stable"
+          channel: stable
 
-      - name: Flutter doctor
-        run: flutter doctor
-
-      - name: Get dependencies
+      - name: Flutter pub get
         run: flutter pub get
 
-      - name: Create Android platform (if missing)
+      - name: Create Android platform if missing
         run: |
           if [ ! -d "android" ]; then
             flutter create .
           fi
 
-      - name: Build APK (split per ABI)
-        run: flutter build apk --release --split-per-abi
+      - name: Build universal release APK
+        run: flutter build apk --release
 
-      - name: Upload APK files
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk-files
-          path: build/app/outputs/flutter-apk/*.apk
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
