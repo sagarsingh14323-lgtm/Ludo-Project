@@ -1,4 +1,4 @@
-name: Build Flutter APK
+name: Build Flutter APK and Generate Android Folder
 
 on:
   workflow_dispatch:
@@ -8,34 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.6'
-          channel: 'stable'
+          flutter-version: 3.19.6
+          channel: stable
 
-      - name: Flutter doctor
-        run: flutter doctor -v
-
-      - name: Create Android platform
-        run: flutter create .
-
-      - name: Clean
-        run: flutter clean
-
-      - name: Get dependencies (retry safe)
+      - name: Create Android folder if missing
         run: |
-          flutter pub get || flutter pub get || flutter pub get
+          if [ ! -d "android" ]; then
+            flutter create .
+          fi
 
-      - name: Build release APK
+      - name: Commit android folder
         run: |
-          flutter build apk --release --no-shrink
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add android ios pubspec.lock
+          git commit -m "Auto generate android folder" || echo "Nothing to commit"
+          git push
