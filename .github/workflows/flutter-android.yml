@@ -1,4 +1,4 @@
-name: Build Flutter Android Folder
+name: Build Flutter APK
 
 on:
   workflow_dispatch:
@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -25,10 +23,14 @@ jobs:
             flutter create .
           fi
 
-      - name: Commit android folder
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
-          git add android ios pubspec.lock
-          git commit -m "Auto generate android folder" || echo "Nothing to commit"
-          git push
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Build APK (debug)
+        run: flutter build apk --debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
