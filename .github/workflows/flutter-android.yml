@@ -20,15 +20,19 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      # ✅ ANDROID PLATFORM SAFE CREATE
       - name: Create Android platform
         run: flutter create .
 
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Clean
+        run: flutter clean
+
+      - name: Get dependencies (retry safe)
+        run: |
+          flutter pub get || flutter pub get || flutter pub get
 
       - name: Build release APK
-        run: flutter build apk --release
+        run: |
+          flutter build apk --release --no-shrink
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
