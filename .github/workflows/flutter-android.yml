@@ -25,6 +25,12 @@ jobs:
             flutter create .
           fi
 
+      # 🔥 YAHI ADD KARNA THA
+      - name: Generate SHA1
+        run: |
+          cd android
+          ./gradlew signingReport
+
       - name: Commit android folder
         run: |
           git config --global user.name "github-actions"
