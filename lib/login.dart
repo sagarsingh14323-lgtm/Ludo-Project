@@ -1,56 +1,89 @@
 import 'package:flutter/material.dart';
-import 'otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'home.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
+
+  String verificationId = "";
+  bool otpSent = false;
+
+  void sendOtp() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: "+91${phoneController.text}",
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        goHome();
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.message ?? "Error")));
+      },
+      codeSent: (String vid, int? token) {
+        setState(() {
+          verificationId = vid;
+          otpSent = true;
+        });
+      },
+      codeAutoRetrievalTimeout: (String vid) {
+        verificationId = vid;
+      },
+    );
+  }
+
+  void verifyOtp() async {
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: otpController.text,
+    );
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    goHome();
+  }
+
+  void goHome() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomePage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController phoneController = TextEditingController();
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Login")),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "Enter Mobile Number",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 15),
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              maxLength: 10,
               decoration: const InputDecoration(
-                hintText: "10 digit mobile number",
-                border: OutlineInputBorder(),
+                labelText: "Mobile Number",
               ),
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const OTPScreen(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  "Send OTP",
-                  style: TextStyle(fontSize: 16),
+            if (otpSent)
+              TextField(
+                controller: otpController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "OTP",
                 ),
               ),
-            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: otpSent ? verifyOtp : sendOtp,
+              child: Text(otpSent ? "Verify OTP" : "Send OTP"),
+            )
           ],
         ),
       ),
