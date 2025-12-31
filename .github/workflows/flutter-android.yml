@@ -1,4 +1,4 @@
-name: Build Flutter APK and Generate Android Folder
+name: Build Flutter Android Folder
 
 on:
   workflow_dispatch:
@@ -24,12 +24,6 @@ jobs:
           if [ ! -d "android" ]; then
             flutter create .
           fi
-
-      - name: Generate SHA1
-        run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew signingReport
 
       - name: Commit android folder
         run: |
