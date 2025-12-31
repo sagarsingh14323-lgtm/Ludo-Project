@@ -20,11 +20,9 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      # 🔥 MOST IMPORTANT STEP (Android embedding v2 fix)
-      - name: Force create Android platform
-        run: |
-          rm -rf android
-          flutter create .
+      # ✅ ANDROID PLATFORM SAFE CREATE
+      - name: Create Android platform
+        run: flutter create .
 
       - name: Get dependencies
         run: flutter pub get
