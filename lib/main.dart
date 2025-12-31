@@ -1,36 +1,51 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 void main() {
-  runApp(const LudoApp());
+  runApp(const MyApp());
 }
 
-class LudoApp extends StatelessWidget {
-  const LudoApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Ludo App',
-      home: const LudoBoardScreen(),
+      home: const SplashScreen(),
     );
   }
 }
 
-class LudoBoardScreen extends StatelessWidget {
-  const LudoBoardScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Timer(const Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ludo App'),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.white,
       body: Center(
         child: Image.asset(
-          'assets/images/ludo_board.png',
-          fit: BoxFit.contain,
+          'assets/images/logo.png',
+          width: 200,
         ),
       ),
     );
