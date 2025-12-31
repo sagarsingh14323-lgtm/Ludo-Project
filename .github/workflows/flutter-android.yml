@@ -25,12 +25,11 @@ jobs:
             flutter create .
           fi
 
-      
       - name: Generate SHA1
-  run: |
-    cd android
-    chmod +x ./gradlew
-    ./gradlew signingReport
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew signingReport
 
       - name: Commit android folder
         run: |
