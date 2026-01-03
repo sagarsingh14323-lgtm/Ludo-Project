@@ -8,24 +8,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.6'
           channel: 'stable'
 
+      # 3️⃣ Flutter pub get
       - name: Flutter pub get
         run: flutter pub get
 
+      # 4️⃣ Build debug APK
       - name: Build APK (debug)
         run: flutter build apk --debug
 
+      # 5️⃣ Check APK path (important)
+      - name: Check APK output
+        run: |
+          echo "===== APK FILES ====="
+          ls -R build/app/outputs
+
+      # 6️⃣ Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: app-debug-apk
           path: build/app/outputs/flutter-apk/app-debug.apk
-
